@@ -32,6 +32,13 @@ function check_alchemical_prev_enhancement(given_card)
             end
         end
     end
+    if G.deck.config.ra_stonerot then
+        for _, stonerotted_card in ipairs(G.deck.config.ra_stonerot) do
+            if given_card.unique_val == stonerotted_card.card_id and given_card.config.center == G.P_CENTERS.m_stone then
+                return stonerotted_card.prev_enhancement
+            end
+        end
+    end	
 
     return given_card.config.center
 end
@@ -463,6 +470,7 @@ bismuth = { -- Bismuth
     key = "bismuth",
     -- loc_txt = {
     --     name = 'Bismuth',
+	
     --     text = {
     --         "Converts up to",
     --         "{C:attention}#1#{} selected cards",
@@ -1743,3 +1751,272 @@ SMODS.Consumable { -- Uranium
         return true
     end,
 }
+
+lithium = { -- Lithium
+    set = "Alchemical",
+    atlas = "arcanum_alchemical",
+    key = "lithium",
+    -- loc_txt = {
+    --     name = 'Lithium',
+    --     text = {
+    --         "Converts up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into the most common",
+    --         "{C:attention}suit for one blind",
+    --         "{C:inactive}Current suit: {V:1}#2#{}"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, card)
+        local top_suit = get_most_common_suit()
+        local vars = { get_modified_extra_value(card), localize(top_suit, 'suits_plural'), colours = { G.C.SUITS[top_suit] } }
+        return { vars = vars }
+    end,
+    unlocked = true,
+    discovered = false,
+    config = { extra = 4, select = true },
+    cost = 3,
+    pos = { x = 0, y = 4 },
+    dependencies = "Bunco",
+    can_use = function(self, card)
+        if alchemical_can_use(self, card) then
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
+        else
+            return false
+        end
+    end,
+
+    use = function(self, used_card)
+        G.deck.config.ra_lithium = G.deck.config.ra_lithium or {}
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                local top_suit = get_most_common_suit();
+
+                play_sound('tarot1')
+                for k, card in ipairs(G.hand.highlighted) do
+                    delay(0.05)
+                    card:juice_up(1, 0.5)
+                    local prev_suit = card.base.suit
+                    --card:change_suit(top_suit)
+					card:change_suit("bunc_Halberds")
+                    table.insert(G.deck.config.ra_lithium, { card_id = card.unique_val, prev_suit = prev_suit })
+                end
+                G.hand:parse_highlighted() -- Updates poker hand if turned into a flush
+                return true
+            end
+        }))
+    end,
+
+    end_blind = function(self, card)
+        if G.deck.config.ra_lithium then
+            local _first_dissolve = false
+            for _, lithiumed_card in ipairs(G.deck.config.ra_lithium) do
+                for k, card in ipairs(G.playing_cards) do
+                    if card.unique_val == lithiumed_card.card_id then
+                        card:change_suit(lithiumed_card.prev_suit)
+                    end
+                end
+            end
+            G.deck.config.ra_lithium = {}
+        end
+        return true
+    end,
+}
+if ReduxArcanumMod.config.new_content then
+    lithium.config = { extra = 3 }
+end
+SMODS.Consumable(lithium)
+
+honey = { -- Honey
+    set = "Alchemical",
+    atlas = "arcanum_alchemical",
+    key = "honey",
+    -- loc_txt = {
+    --     name = 'Honey',
+    --     text = {
+    --         "Converts up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into the most common",
+    --         "{C:attention}suit for one blind",
+    --         "{C:inactive}Current suit: {V:1}#2#{}"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, card)
+        local top_suit = get_most_common_suit()
+        local vars = { get_modified_extra_value(card), localize(top_suit, 'suits_plural'), colours = { G.C.SUITS[top_suit] } }
+        return { vars = vars }
+    end,
+    unlocked = true,
+    discovered = false,
+    config = { extra = 4, select = true },
+    cost = 3,
+    pos = { x = 1, y = 4 },
+    dependencies = "Bunco",
+    can_use = function(self, card)
+        if alchemical_can_use(self, card) then
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
+        else
+            return false
+        end
+    end,
+
+    use = function(self, used_card)
+        G.deck.config.ra_honey = G.deck.config.ra_honey or {}
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                local top_suit = get_most_common_suit();
+
+                play_sound('tarot1')
+                for k, card in ipairs(G.hand.highlighted) do
+                    delay(0.05)
+                    card:juice_up(1, 0.5)
+                    local prev_suit = card.base.suit
+                    --card:change_suit(top_suit)
+					card:change_suit("bunc_Fleurons")
+                    table.insert(G.deck.config.ra_honey, { card_id = card.unique_val, prev_suit = prev_suit })
+                end
+                G.hand:parse_highlighted() -- Updates poker hand if turned into a flush
+                return true
+            end
+        }))
+    end,
+
+    end_blind = function(self, card)
+        if G.deck.config.ra_honey then
+            local _first_dissolve = false
+            for _, honeyed_card in ipairs(G.deck.config.ra_honey) do
+                for k, card in ipairs(G.playing_cards) do
+                    if card.unique_val == honeyed_card.card_id then
+                        card:change_suit(honeyed_card.prev_suit)
+                    end
+                end
+            end
+            G.deck.config.ra_honey = {}
+        end
+        return true
+    end,
+}
+if ReduxArcanumMod.config.new_content then
+    honey.config = { extra = 3 }
+end
+SMODS.Consumable(honey)
+
+
+SMODS.Consumable { -- Chlorine
+    set = "Alchemical",
+    atlas = "arcanum_alchemical",
+    key = "chlorine",
+    -- loc_txt = {
+    --     name = 'Chlorine',
+    --     text = {
+    --         "Completes the current",
+    --         "Cine quest"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        return { vars = vars }
+    end,
+
+    unlocked = true,
+    discovered = false,
+    config = { extra = 1 },
+    cost = 3,
+    pos = { x = 2, y = 4 },
+    dependencies = "Reverie",
+    use = function(self, card)
+        for _, v in ipairs(G.cine_quests.cards) do
+            if v.ability.set == "Cine" and 
+			   v.area == G.cine_quests and
+               v.ability.extra.goal > 0 then
+				G.E_MANAGER:add_event(Event({
+                    trigger = 'after',
+                    delay = 0.3,
+                    func = (function()
+                        v:juice_up(0.8, 0.8)
+                        card:juice_up()
+                        v.ability.extra.goal = 0
+                        Reverie.complete_cine_quest(v)
+                        return true
+                    end)
+                }))
+            end
+        end
+    end,
+}
+
+stonerot = { -- Stone (rotted)
+    set = "Alchemical",
+    atlas = "arcanum_alchemical",
+    key = "stonerot",
+    -- loc_txt = {
+    --     name = 'Stone',
+    --     text = {
+    --         "Enhances up to",
+    --         "{C:attention}#1#{} selected cards",
+    --         "into {C:attention}Stone Cards",
+    --         "for one blind"
+    --     }
+    -- },
+    loc_vars = function(self, info_queue, card)
+        local vars = { get_modified_extra_value(card) }
+        info_queue[#info_queue + 1] = G.P_CENTERS.m_stone
+        return { vars = vars }
+    end,
+    unlocked = true,
+    discovered = false,
+    config = { extra = 4, select = true },
+    cost = 3,
+    pos = { x = 3, y = 4 },
+    dependencies = "FearJokers",
+    can_use = function(self, card)
+        if alchemical_can_use(self, card) then
+            if #G.hand.highlighted <= get_modified_extra_value(card) and #G.hand.highlighted >= 1 then return true else return false end
+        else
+            return false
+        end
+    end,
+    in_pool = function(self)
+        return false
+    end,
+    use = function(self, used_card)
+        G.deck.config.ra_stonerot = G.deck.config.ra_stonerot or {}
+        G.E_MANAGER:add_event(Event({
+            trigger = 'after',
+            delay = 0.1,
+            func = function()
+                play_sound('tarot1')
+                for k, card in ipairs(G.hand.highlighted) do
+                    local prev_enhancement = check_alchemical_prev_enhancement(card)
+                    card:set_ability(G.P_CENTERS.m_stone)
+                    card:juice_up(1, 0.5)
+                    used_card:juice_up(0.3, 0.5)
+                    table.insert(G.deck.config.ra_stonerot,
+                        { card_id = card.unique_val, prev_enhancement = prev_enhancement })
+                end
+                return true
+            end
+        }))
+    end,
+
+    end_blind = function(self, card)
+        if G.deck.config.ra_stonerot then
+            for _, stonerotted_card in ipairs(G.deck.config.ra_stonerot) do
+                for k, card in ipairs(G.playing_cards) do
+                    if card.unique_val == stonerotted_card.card_id and card.config.center == G.P_CENTERS.m_stone then
+                        card:set_ability(stonerotted_card.prev_enhancement)
+                    end
+                end
+            end
+            G.deck.config.ra_stonerot = {}
+        end
+        return true
+    end,
+}
+if ReduxArcanumMod.config.new_content then
+    stonerot.config = { extra = 5 }
+end
+SMODS.Consumable(stonerot)
