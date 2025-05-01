@@ -308,6 +308,57 @@ let alchemicals = [
     },
     rarity: "Alchemical"
   },
+    {
+    name: "Lithium",
+    text: [
+      "Changes the suit of up to {C:attention}#1#{} selected cards into {C:attention} Halberds for this blind"
+    ],
+    text_vars: [3],
+    image_url: "img/alchemical_atlas.png",
+    image_pos: {
+      x: 0,
+      y: 4
+    },
+    rarity: "Alchemical"
+  },   
+  {
+    name: "Honey",
+    text: [
+      "Changes the suit of up to {C:attention}#1#{} selected cards into {C:attention} Fleurons for this blind"
+    ],
+    text_vars: [3],
+    image_url: "img/alchemical_atlas.png",
+    image_pos: {
+      x: 1,
+      y: 4
+    },
+    rarity: "Alchemical"
+  },   
+  {
+    name: "Chlorine",
+    text: [
+      "Completes the criteria to flip the current Cine card"
+    ],
+    image_url: "img/alchemical_atlas.png",
+    image_pos: {
+      x: 2,
+      y: 4
+    },
+    rarity: "Alchemical"
+  },   
+  {
+    name: "Stone",
+    text: [
+      "Enhances up to {C:attention}#1#{} selected cards into {C:attention}Stone Cards for one blind"
+    ],
+    text_vars: [5],
+    image_url: "img/alchemical_atlas.png",
+    image_pos: {
+      x: 3,
+      y: 4
+    },
+    rarity: "Alchemical"
+  }, 
 ]
 
 let jokers = [
