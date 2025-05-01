@@ -272,6 +272,40 @@ return {
                     "in hand for this blind"
                 }
             },
+            c_ReduxArcanum_lithium = {
+                name = 'Lithium',
+                text = {
+                    "Changes the suit of up to",
+                    "{C:attention}#1#{} selected cards",
+                    "into {C:attention}Halberds",
+                    "for this blind"
+                }
+            },
+            c_ReduxArcanum_honey = {
+                name = 'Honey',
+                text = {
+                    "Changes the suit of up to",
+                    "{C:attention}#1#{} selected cards",
+                    "into {C:attention}Fleurons",
+                    "for this blind"
+                }
+            },
+			c_ReduxArcanum_chlorine = {
+                name = 'Chlorine',
+                text = {
+			        "Completes the current",
+                    "Cine quest"
+                }
+            },
+            c_ReduxArcanum_stonerot = {
+                name = 'Stone',
+                text = {
+                    "Enhances up to",
+                    "{C:attention}#1#{} selected cards",
+                    "into {C:attention}Stone Cards",
+                    "for this blind"
+                }
+            },
         },
         Back = {
             b_ReduxArcanum_herbalist = {
